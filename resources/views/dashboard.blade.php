@@ -12,6 +12,9 @@
                     <p class="mt-4 text-sm text-gray-600">
                         Empresa activa: {{ auth()->user()->activeCompany()?->name ?? 'Ninguna' }}
                     </p>
+                <p class="text-sm text-gray-600">
+                    ¿Es admin?: {{ auth()->user()->isAdmin() ? 'Sí' : 'No' }}
+                </p>
                 </div>
             </div>
         </div>

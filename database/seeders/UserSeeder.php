@@ -20,8 +20,9 @@ class UserSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-
         $company = Company::where('tax_id', 'TEST-0001')->first();
+        app(\Spatie\Permission\PermissionRegistrar::class)->setPermissionsTeamId(0);
+        $user->assignRole('admin');
 
         if ($company) {
             $user->companies()->syncWithoutDetaching([
