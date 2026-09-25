@@ -11,6 +11,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[Fillable(['name', 'email', 'password'])]
 #[Hidden(['password', 'remember_token'])]
@@ -57,5 +59,13 @@ class User extends Authenticatable
         $registrar->setPermissionsTeamId($originalTeamId);
 
         return $result;
+    }
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['name', 'email', 'type'])
+            ->logOnlyDirty()
+            ->useLogName('user')
+            ->dontSubmitEmptyLogs();
     }
 }
