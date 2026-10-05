@@ -38,6 +38,14 @@ class LoginForm extends Form
             ]);
         }
 
+        if (Auth::user()->isDisabled()) {
+            Auth::logout();
+
+            throw ValidationException::withMessages([
+                'form.email' => 'Esta cuenta ha sido deshabilitada. Contacta al administrador.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
     }
 
@@ -67,6 +75,6 @@ class LoginForm extends Form
      */
     protected function throttleKey(): string
     {
-        return Str::transliterate(Str::lower($this->email).'|'.request()->ip());
+        return Str::transliterate(Str::lower($this->email) . '|' . request()->ip());
     }
 }

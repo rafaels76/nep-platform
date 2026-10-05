@@ -4,14 +4,23 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Spatie\Permission\PermissionRegistrar;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResolveCompanyContext
 {
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
+
+        // NUEVO: cortar la sesión si el usuario fue deshabilitado
+        if ($user && $user->isDisabled()) {
+            auth()->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return redirect()->route('login')->with('status', 'Tu cuenta ha sido deshabilitada.');
+        }
 
         if ($user) {
             $activeCompanyId = session('active_company_id');
@@ -25,8 +34,6 @@ class ResolveCompanyContext
                 }
             }
 
-            // Sincroniza el contexto de permisos de Spatie con la empresa activa.
-            // Los administradores usan team_id = 0 (contexto global), resuelto aparte en el Gate::before.
             app(PermissionRegistrar::class)->setPermissionsTeamId($activeCompanyId);
         }
 

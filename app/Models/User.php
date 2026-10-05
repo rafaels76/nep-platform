@@ -68,4 +68,8 @@ class User extends Authenticatable
             ->useLogName('user')
             ->dontSubmitEmptyLogs();
     }
+public function isDisabled(): bool
+{
+    return $this->status === 'disabled';
+}
 }

@@ -50,6 +50,9 @@
                         class="text-indigo-600 hover:text-indigo-800 text-sm underline">
                         Asignar rol
                     </button>
+                    <a href="{{ route('admin.usuarios.edit', $user) }}" class="text-gray-600 hover:text-gray-800 text-sm underline mr-3">
+                        Editar
+                    </a>
                 </td>
             </tr>
             @endforeach
