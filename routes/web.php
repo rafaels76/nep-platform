@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Livewire\Admin\Users\Index as AdminUsersIndex;
 use App\Livewire\Admin\Users\Create as AdminUsersCreate;
 use App\Livewire\Admin\Users\Edit as AdminUsersEdit;
+use App\Livewire\Cases\Index as CasesIndex;
 
 
 
@@ -26,5 +27,9 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/usuarios/{user}/editar', AdminUsersEdit::class)->name('usuarios.edit');
     });
 
+
+Route::get('/casos', CasesIndex::class)
+    ->middleware(['auth', 'verified'])
+    ->name('casos.index');
 
 require __DIR__ . '/auth.php';

@@ -55,8 +55,11 @@ class User extends Authenticatable
         $originalTeamId = $registrar->getPermissionsTeamId();
 
         $registrar->setPermissionsTeamId(0);
+        $this->unsetRelation('roles')->unsetRelation('permissions');
         $result = $this->hasRole('admin');
+
         $registrar->setPermissionsTeamId($originalTeamId);
+        $this->unsetRelation('roles')->unsetRelation('permissions');
 
         return $result;
     }
@@ -68,8 +71,8 @@ class User extends Authenticatable
             ->useLogName('user')
             ->dontSubmitEmptyLogs();
     }
-public function isDisabled(): bool
-{
-    return $this->status === 'disabled';
-}
+    public function isDisabled(): bool
+    {
+        return $this->status === 'disabled';
+    }
 }
