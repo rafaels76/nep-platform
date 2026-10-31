@@ -8,6 +8,7 @@ use App\Livewire\Cases\Index as CasesIndex;
 use App\Http\Controllers\ActiveCompanyController;
 use App\Livewire\Admin\Companies\Form as AdminCompaniesForm;
 use App\Livewire\Admin\Companies\Index as AdminCompaniesIndex;
+use App\Livewire\Cases\Show as CasesShow;
 
 Route::view('/', 'welcome');
 
@@ -39,5 +40,9 @@ Route::get('/casos', CasesIndex::class)
 Route::post('/empresa-activa', ActiveCompanyController::class)
     ->middleware(['auth', 'verified'])
     ->name('empresa-activa.update');
+
+Route::get('/casos/{caseId}', CasesShow::class)
+    ->middleware(['auth', 'verified'])
+    ->name('casos.show');
 
 require __DIR__ . '/auth.php';
