@@ -23,18 +23,14 @@ class ResolveCompanyContext
         }
 
         if ($user) {
-            $activeCompanyId = session('active_company_id');
+            $company = $user->activeCompany();
 
-            if (! $activeCompanyId) {
-                $firstCompany = $user->companies()->first();
-
-                if ($firstCompany) {
-                    session(['active_company_id' => $firstCompany->id]);
-                    $activeCompanyId = $firstCompany->id;
-                }
+            if (! $company) {
+                $company = $user->defaultCompany();
+                session(['active_company_id' => $company?->id]);
             }
 
-            app(PermissionRegistrar::class)->setPermissionsTeamId($activeCompanyId);
+            app(PermissionRegistrar::class)->setPermissionsTeamId($company?->id);
         }
 
         return $next($request);

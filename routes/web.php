@@ -5,7 +5,7 @@ use App\Livewire\Admin\Users\Index as AdminUsersIndex;
 use App\Livewire\Admin\Users\Create as AdminUsersCreate;
 use App\Livewire\Admin\Users\Edit as AdminUsersEdit;
 use App\Livewire\Cases\Index as CasesIndex;
-
+use App\Http\Controllers\ActiveCompanyController;
 
 
 Route::view('/', 'welcome');
@@ -31,5 +31,9 @@ Route::middleware(['auth', 'verified', 'admin'])
 Route::get('/casos', CasesIndex::class)
     ->middleware(['auth', 'verified'])
     ->name('casos.index');
+
+Route::post('/empresa-activa', ActiveCompanyController::class)
+    ->middleware(['auth', 'verified'])
+    ->name('empresa-activa.update');
 
 require __DIR__ . '/auth.php';
