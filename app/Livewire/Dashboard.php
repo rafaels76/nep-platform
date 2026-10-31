@@ -58,7 +58,7 @@ class Dashboard extends Component
             ->groupBy('status')
             ->pluck('total', 'status');
 
-        $statusCounts = collect(CaseStatus::cases())->map(fn (CaseStatus $status) => [
+        $statusCounts = collect(CaseStatus::cases())->map(fn(CaseStatus $status) => [
             'status' => $status,
             'total' => (int) ($byStatus[$status->value] ?? 0),
         ]);
@@ -76,7 +76,7 @@ class Dashboard extends Component
 
         $avgDays = $closedCases->isEmpty()
             ? null
-            : $closedCases->avg(fn ($case) => abs($case->created_at->diffInHours($case->closed_at))) / 24;
+            : $closedCases->avg(fn($case) => abs($case->created_at->diffInHours($case->closed_at))) / 24;
 
         $recent = $isSpecialist
             ? (clone $open)->with('assignee')->oldest()->take(6)->get()
@@ -116,7 +116,8 @@ class Dashboard extends Component
         return User::query()
             ->whereIn('id', $loads->keys()->merge($activeIds)->unique()->values())
             ->get(['id', 'name', 'status'])
-            ->map(fn (User $person) => [
+            ->map(fn(User $person) => [
+                'id' => $person->id,
                 'name' => $person->name,
                 'disabled' => $person->isDisabled(),
                 'total' => (int) ($loads[$person->id] ?? 0),
@@ -169,7 +170,7 @@ class Dashboard extends Component
                     ->count(),
             ],
             'topCompanies' => Company::query()
-                ->withCount(['cases as open_cases_count' => fn ($q) => $q->where('status', '!=', $closed)])
+                ->withCount(['cases as open_cases_count' => fn($q) => $q->where('status', '!=', $closed)])
                 ->orderByDesc('open_cases_count')
                 ->orderBy('name')
                 ->take(5)

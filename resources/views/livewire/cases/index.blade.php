@@ -24,6 +24,46 @@
     </div>
     @endif
 
+    <div class="mb-4 flex flex-wrap items-end gap-3">
+        <div>
+            <label class="block text-xs text-gray-500 mb-1">Estado</label>
+            <select wire:model.live="status" class="rounded border-gray-300 text-sm">
+                <option value="">Todos</option>
+                <option value="abiertos">Abiertos (sin cerrar)</option>
+                @foreach (\App\Enums\CaseStatus::cases() as $option)
+                <option value="{{ $option->value }}">{{ $option->label() }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        @unless ($isSpecialist)
+        <div>
+            <label class="block text-xs text-gray-500 mb-1">Freelancer</label>
+            <select wire:model.live="assigned" class="rounded border-gray-300 text-sm">
+                <option value="">Todos</option>
+                <option value="none">Sin asignar</option>
+                @foreach ($filterAssignees as $person)
+                <option value="{{ $person->id }}">
+                    {{ $person->name }}{{ $person->isDisabled() ? ' (deshabilitado)' : '' }}
+                </option>
+                @endforeach
+            </select>
+        </div>
+        @endunless
+
+        @if ($closedDaysActive)
+        <span class="rounded bg-gray-100 px-2 py-1 text-xs text-gray-600">
+            Cerrados en los últimos {{ $closedDaysActive }} días
+        </span>
+        @endif
+
+        @if ($hasFilters)
+        <button type="button" wire:click="resetFilters" class="text-sm text-indigo-600 hover:underline">
+            Quitar filtros
+        </button>
+        @endif
+    </div>
+
     @if ($showForm)
     <form wire:submit="create" class="mb-6 p-4 border rounded space-y-3 max-w-xl">
         <div>
