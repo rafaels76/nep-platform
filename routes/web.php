@@ -9,10 +9,11 @@ use App\Http\Controllers\ActiveCompanyController;
 use App\Livewire\Admin\Companies\Form as AdminCompaniesForm;
 use App\Livewire\Admin\Companies\Index as AdminCompaniesIndex;
 use App\Livewire\Cases\Show as CasesShow;
+use App\Livewire\Dashboard;
 
 Route::view('/', 'welcome');
 
-Route::view('dashboard', 'dashboard')
+Route::get('dashboard', Dashboard::class)
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 

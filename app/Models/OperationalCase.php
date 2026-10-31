@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Builder;
 
 class OperationalCase extends Model
 {
@@ -59,5 +60,22 @@ class OperationalCase extends Model
             ->logOnlyDirty()
             ->useLogName('case')
             ->dontSubmitEmptyLogs();
+    }
+
+    /**
+     * Casos visibles para un usuario: los de su empresa activa y,
+     * si es freelancer, solo los que tiene asignados.
+     */
+    public function scopeVisibleTo(Builder $query, User $user, ?Company $company = null): Builder
+    {
+        $company ??= $user->activeCompany();
+
+        if (! $company) {
+            return $query->whereRaw('1 = 0');
+        }
+
+        return $query
+            ->where('company_id', $company->id)
+            ->when($user->type === 'specialist', fn($q) => $q->where('assigned_to', $user->id));
     }
 }
