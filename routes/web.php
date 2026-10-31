@@ -6,7 +6,8 @@ use App\Livewire\Admin\Users\Create as AdminUsersCreate;
 use App\Livewire\Admin\Users\Edit as AdminUsersEdit;
 use App\Livewire\Cases\Index as CasesIndex;
 use App\Http\Controllers\ActiveCompanyController;
-
+use App\Livewire\Admin\Companies\Form as AdminCompaniesForm;
+use App\Livewire\Admin\Companies\Index as AdminCompaniesIndex;
 
 Route::view('/', 'welcome');
 
@@ -25,6 +26,9 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::get('/usuarios', AdminUsersIndex::class)->name('usuarios.index');
         Route::get('/usuarios/crear', AdminUsersCreate::class)->name('usuarios.create');
         Route::get('/usuarios/{user}/editar', AdminUsersEdit::class)->name('usuarios.edit');
+        Route::get('/empresas', AdminCompaniesIndex::class)->name('empresas.index');
+        Route::get('/empresas/crear', AdminCompaniesForm::class)->name('empresas.create');
+        Route::get('/empresas/{company}/editar', AdminCompaniesForm::class)->name('empresas.edit');
     });
 
 

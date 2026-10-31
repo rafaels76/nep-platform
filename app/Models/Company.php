@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Company extends Model
 {
@@ -17,6 +18,12 @@ class Company extends Model
 
     protected $casts = [
         'metadata' => 'array',
+    ];
+
+    public const STATUSES = [
+        'active' => 'Activa',
+        'inactive' => 'Inactiva',
+        'suspended' => 'Suspendida',
     ];
 
     public function users(): BelongsToMany
@@ -33,5 +40,14 @@ class Company extends Model
             ->logOnlyDirty()
             ->useLogName('company')
             ->dontSubmitEmptyLogs();
+    }
+    public function statusLabel(): string
+    {
+        return self::STATUSES[$this->status] ?? $this->status;
+    }
+
+    public function cases(): HasMany
+    {
+        return $this->hasMany(OperationalCase::class);
     }
 }

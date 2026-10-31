@@ -42,6 +42,9 @@ new class extends Component
                     <x-nav-link :href="route('admin.usuarios.index')" :active="request()->routeIs('admin.usuarios.*')">
                         {{ __('Administración') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.empresas.index')" :active="request()->routeIs('admin.empresas.*')">
+                        {{ __('Empresas') }}
+                    </x-nav-link>
                     @endif
                 </div>
 
