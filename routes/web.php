@@ -11,7 +11,11 @@ use App\Livewire\Admin\Companies\Index as AdminCompaniesIndex;
 use App\Livewire\Cases\Show as CasesShow;
 use App\Livewire\Dashboard;
 
-Route::view('/', 'welcome');
+Route::get('/', function () {
+    return auth()->check()
+        ? redirect()->route('dashboard')
+        : view('welcome');
+})->name('home');
 
 Route::get('dashboard', Dashboard::class)
     ->middleware(['auth', 'verified'])
